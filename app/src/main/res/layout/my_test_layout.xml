@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/todayDateTV"
+        android:id="@+id/todayDateTV"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/maxTempTV"
+        android:id="@+id/maxTemp"
+        android:layout_below="@+id/todayDateTV"
+        android:layout_alignRight="@+id/todayDateTV"
+        android:layout_alignEnd="@+id/todayDateTV"
+        android:layout_marginTop="44dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/minTempTV"
+        android:id="@+id/minTemp"
+        android:layout_below="@+id/maxTemp"
+        android:layout_alignLeft="@+id/maxTemp"
+        android:layout_alignStart="@+id/maxTemp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/iconIV"
+        android:layout_alignTop="@+id/maxTemp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="66dp"
+        android:layout_marginEnd="66dp"
+        android:contentDescription="@string/iconName"
+        android:src="@mipmap/ic_launcher" />
+
+</RelativeLayout>

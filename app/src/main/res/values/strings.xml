@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Sunshine</string>
+    <string name="action_settings">Settings</string>
+    <string name="todayDateTV">Today, June 9</string>
+    <string name="maxTempTV">21°</string>
+    <string name="minTempTV">8°</string>
+    <string name="iconName">Cloudy</string>
+    <string name="list_item_forecast_text">Today - Sunny - 88 / 63</string>
+</resources>
