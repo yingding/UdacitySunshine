@@ -68,12 +68,14 @@ public class ForecastFragment extends Fragment {
         ListView listView = (ListView) rootView.findViewById(R.id.listView_forecast);
         listView.setAdapter(forecastAdapter);
 
+        new FetchWeatherTask().execute(""); //input string params
+
 
         return rootView;
     }
 
     private class FetchWeatherTask
-            extends AsyncTask<String, Void,String> {
+            extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
