@@ -6,4 +6,5 @@
     <string name="minTempTV">8°</string>
     <string name="iconName">Cloudy</string>
     <string name="list_item_forecast_text">Today - Sunny - 88 / 63</string>
+    <string name="menu_refresh" translatable="false">Refresh</string>
 </resources>
