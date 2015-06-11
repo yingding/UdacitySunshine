@@ -213,13 +213,14 @@ public class ForecastFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String[] result) {
-            //forecastAdapter.setNotifyOnChange(false);
             if (result != null) {
+                forecastAdapter.setNotifyOnChange(false);
                 forecastAdapter.clear();
                 for (String dayForecastStr : result) {
                     forecastAdapter.add(dayForecastStr);
                 }
-                //forecastAdapter.notifyDataSetChanged();
+                forecastAdapter.notifyDataSetChanged();
+                forecastAdapter.setNotifyOnChange(true);
             }
         }
     }
