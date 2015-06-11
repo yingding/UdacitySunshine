@@ -220,7 +220,6 @@ public class ForecastFragment extends Fragment {
                     forecastAdapter.add(dayForecastStr);
                 }
                 //forecastAdapter.notifyDataSetChanged();
-                //super.onPostExecute(strings);
             }
         }
     }
