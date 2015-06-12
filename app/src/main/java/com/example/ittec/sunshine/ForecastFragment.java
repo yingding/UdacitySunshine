@@ -106,8 +106,12 @@ public class ForecastFragment extends Fragment {
                 // no x,y margin
                 toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
                 toast.show();*/
-                Intent intent = DetailActivity.makeIntent(appCtx);
+                //Intent intent = DetailActivity.makeIntent(appCtx);
+                Intent intent = DetailActivity.makeIntent(getActivity());
                 intent.putExtra(DetailActivity.DETAIL_STR_NAME, itemStr);
+                // If calling makeIntent from application context
+                // the following flag for this intent should be set.
+                // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 appCtx.startActivity(intent);
             }
         });
