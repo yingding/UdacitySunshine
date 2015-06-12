@@ -109,9 +109,14 @@ public class ForecastFragment extends Fragment {
                 //Intent intent = DetailActivity.makeIntent(appCtx);
                 Intent intent = DetailActivity.makeIntent(getActivity());
                 intent.putExtra(DetailActivity.DETAIL_STR_NAME, itemStr);
-                // If calling makeIntent from application context
-                // the following flag for this intent should be set.
-                // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                /* If calling makeIntent() with application context
+                 * or calling startActivity() from outside of an Activity
+                 * the following flag for this intent should be set.
+                 * This flag will not allow to start multi activity instance,
+                 * it will only resume the same existing Activity, which is
+                 * in this case acceptable
+                 */
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 appCtx.startActivity(intent);
             }
         });
