@@ -1,12 +1,12 @@
 package com.example.ittec.sunshine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -97,6 +96,7 @@ public class ForecastFragment extends Fragment {
                 // String itemStr = (String) parent.getItemAtPosition(position);
                 String itemStr = forecastAdapter.getItem(position);
 
+                /*
                 // if the fragment is detached, the getActivity() will give back a null
                 // it is better to call getActivity().getApplicationContext() and
                 // put it in an instance member variable, while the fragment is created.
@@ -105,7 +105,10 @@ public class ForecastFragment extends Fragment {
                 // center toast in horizontal and vertical center of the screen
                 // no x,y margin
                 toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
-                toast.show();
+                toast.show();*/
+                Intent intent = DetailActivity.makeIntent(appCtx);
+                intent.putExtra(DetailActivity.DETAIL_STR_NAME, itemStr);
+                appCtx.startActivity(intent);
             }
         });
 
