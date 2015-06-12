@@ -93,12 +93,15 @@ public class ForecastFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String itemString = (String) parent.getItemAtPosition(position);
+                // direct access to the forecastAdapter instead of parent(Uncasted AdapterView)
+                // String itemStr = (String) parent.getItemAtPosition(position);
+                String itemStr = forecastAdapter.getItem(position);
+
                 // if the fragment is detached, the getActivity() will give back a null
                 // it is better to call getActivity().getApplicationContext() and
                 // put it in an instance member variable, while the fragment is created.
                 // Toast toast = Toast.makeText(getActivity(), itemString, Toast.LENGTH_LONG);
-                Toast toast = Toast.makeText(appCtx, itemString, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(appCtx, itemStr, Toast.LENGTH_LONG);
                 // center toast in horizontal and vertical center of the screen
                 // no x,y margin
                 toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
