@@ -21,6 +21,8 @@ public class DetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
+            // added the new fragment to the Framelayout with id container in
+            // activity_detail
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
@@ -69,15 +71,21 @@ public class DetailActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container,
                                  Bundle savedInstanceState) {
+            // this containers no id.
             View rootView = inflater.inflate(
                     R.layout.fragment_detail,
                     container,
                     false);
-            TextView forecast = (TextView) rootView
-                    .findViewById(R.id.forecast_detail);
-            // Activity Content is used to get the calling intent.
-            forecast.setText(
-                    getActivity().getIntent().getStringExtra(DETAIL_STR_NAME));
+            //The detail Activity called via intent.
+            Intent intent = getActivity().getIntent();
+            if(intent != null
+                    && intent.getStringExtra(DETAIL_STR_NAME) != null) {
+                TextView forecast = (TextView) rootView
+                        .findViewById(R.id.forecast_detail);
+                // Activity Content is used to get the calling intent.
+                forecast.setText(
+                        getActivity().getIntent().getStringExtra(DETAIL_STR_NAME));
+            }
             return rootView;
         }
     }
