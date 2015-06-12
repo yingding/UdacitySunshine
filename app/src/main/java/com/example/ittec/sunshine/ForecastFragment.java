@@ -1,18 +1,22 @@
 package com.example.ittec.sunshine;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -32,6 +36,7 @@ import java.util.Arrays;
 public class ForecastFragment extends Fragment {
     private ArrayList<String> weekForecast;
     private ArrayAdapter<String> forecastAdapter;
+    private Context appCnt; // applicationContext lives longer as Activity Context
     public ForecastFragment() {
     }
 
@@ -40,6 +45,8 @@ public class ForecastFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        // Set ApplicationContext to member variable
+        appCnt = getActivity().getApplication();
     }
 
     @Override
@@ -81,6 +88,23 @@ public class ForecastFragment extends Fragment {
         );
         ListView listView = (ListView) rootView.findViewById(R.id.listView_forecast);
         listView.setAdapter(forecastAdapter);
+
+        // extend listView with onItemClickListener() Callback
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String itemString = (String) parent.getItemAtPosition(position);
+                // if the fragment is detached, the getActivity() will give back a null
+                // it is better to call getActivity().getApplicationContext() and
+                // put it in an instance member variable, while the fragment is created.
+                // Toast toast = Toast.makeText(getActivity(), itemString, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(appCnt, itemString, Toast.LENGTH_LONG);
+                // center toast in horizontal and vertical center of the screen
+                // no x,y margin
+                toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
+                toast.show();
+            }
+        });
 
         return rootView;
     }
