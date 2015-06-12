@@ -36,7 +36,7 @@ import java.util.Arrays;
 public class ForecastFragment extends Fragment {
     private ArrayList<String> weekForecast;
     private ArrayAdapter<String> forecastAdapter;
-    private Context appCnt; // applicationContext lives longer as Activity Context
+    private Context appCtx; // applicationContext lives longer as Activity Context
     public ForecastFragment() {
     }
 
@@ -46,7 +46,7 @@ public class ForecastFragment extends Fragment {
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
         // Set ApplicationContext to member variable
-        appCnt = getActivity().getApplication();
+        appCtx = getActivity().getApplication();
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ForecastFragment extends Fragment {
                 // it is better to call getActivity().getApplicationContext() and
                 // put it in an instance member variable, while the fragment is created.
                 // Toast toast = Toast.makeText(getActivity(), itemString, Toast.LENGTH_LONG);
-                Toast toast = Toast.makeText(appCnt, itemString, Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(appCtx, itemString, Toast.LENGTH_LONG);
                 // center toast in horizontal and vertical center of the screen
                 // no x,y margin
                 toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
