@@ -2,6 +2,7 @@ package com.example.ittec.sunshine;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -52,7 +53,7 @@ public class SettingsActivity extends PreferenceActivity
         // use the older PreferenceActivity APIs.
 
         // Add 'general' preferences.
-        addPreferencesFromResource(R.xml.pref_general);
+        addPreferencesFromResource(R.xml.pref_general2);
 
         // Add 'notifications' preferences, and a corresponding header.
         PreferenceCategory fakeHeader = new PreferenceCategory(this);
@@ -231,7 +232,7 @@ public class SettingsActivity extends PreferenceActivity
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            //addPreferencesFromResource(R.xml.pref_general);
+            //addPreferencesFromResource(R.xml.pref_general2);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
@@ -271,7 +272,8 @@ public class SettingsActivity extends PreferenceActivity
     public static class DataSyncPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+            super.
+            onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_data_sync);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
@@ -281,6 +283,17 @@ public class SettingsActivity extends PreferenceActivity
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
     }*/
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Add 'general' preferences, defined in the XML file
+        addPreferencesFromResource(R.xml.pref_general);
+
+        // For all preferences, attach an OnPreferenceChangeListener
+        // so the UI Summary can be updated when the preference changes
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+    }
 
     /**
      * This factory method returns an explizit intent to start/resume an SettingsActivity
