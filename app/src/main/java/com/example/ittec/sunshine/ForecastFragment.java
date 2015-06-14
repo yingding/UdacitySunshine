@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ import java.util.Arrays;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
+    private final String TAG= ForecastFragment.class.getSimpleName();
     private ArrayList<String> weekForecast;
     private ArrayAdapter<String> forecastAdapter;
     private Context appCtx; // applicationContext lives longer as Activity Context
@@ -133,7 +135,17 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute("94043"); //no input params
+            // use activity context which is in the same package
+            String locationStr =
+                    PreferenceManager.getDefaultSharedPreferences(
+                            appCtx)
+                    .getString(
+                            // get the key from string resource
+                            getResources().getString(R.string.pref_location_key),
+                            "");
+            Log.v(TAG,"location preference is: " + locationStr);
+
+            new FetchWeatherTask().execute(locationStr); //no input params
             return true;
         }
         return super.onOptionsItemSelected(item);
