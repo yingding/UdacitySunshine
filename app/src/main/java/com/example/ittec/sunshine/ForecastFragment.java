@@ -2,6 +2,7 @@ package com.example.ittec.sunshine;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -63,6 +64,7 @@ public class ForecastFragment extends Fragment {
 
         // Create some dummy data for the ListView. Here's a sample weekly data
         // represented as "day, whether, high/low"
+        /*
         String[] forecastArray = {
                 "Today - Sunny - 88/63",
                 "Tomorrow - Froggy - 70/40",
@@ -74,6 +76,7 @@ public class ForecastFragment extends Fragment {
         };
         weekForecast = new ArrayList<>(
                 Arrays.asList(forecastArray));
+        */
         /*
          * used activity context, which contains the globle information of
          * the app environment.
@@ -85,7 +88,8 @@ public class ForecastFragment extends Fragment {
                 R.layout.list_item_forecast,
                 // ID of textView within the list_item_forecast
                 R.id.list_item_forecast_textview,
-                weekForecast
+                // weekForecast
+                new ArrayList<String>() // empty ArrayList without fake data.
         );
         ListView listView = (ListView) rootView.findViewById(R.id.listView_forecast);
         listView.setAdapter(forecastAdapter);
@@ -126,26 +130,38 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * this is called after onViewCreate()
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecastfragment,menu);
+    }
+
+    private void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+        // use activity context which is in the same package
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(getActivity());//or with appCtx
+        String locationStr = prefs.getString(
+                // get the key from string resource
+                getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default)
+        );
+        weatherTask.execute(locationStr);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            // use activity context which is in the same package
-            String locationStr =
-                    PreferenceManager.getDefaultSharedPreferences(
-                            appCtx)
-                    .getString(
-                            // get the key from string resource
-                            getResources().getString(R.string.pref_location_key),
-                            "");
-            Log.v(TAG,"location preference is: " + locationStr);
-
-            new FetchWeatherTask().execute(locationStr); //no input params
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
