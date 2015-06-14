@@ -1,5 +1,7 @@
 package com.example.ittec.sunshine;
 
+import android.content.Context;
+import android.content.Intent;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -279,4 +281,14 @@ public class SettingsActivity extends PreferenceActivity
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
     }*/
+
+    /**
+     * This factory method returns an explizit intent to start/resume an SettingsActivity
+     * @param ctx: Activity Context or Applikcation Context
+     * @return Intent to start SettingsActivity
+     */
+    public static Intent makeIntent(Context ctx) {
+        return new Intent(ctx, SettingsActivity.class);
+        //.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
 }

@@ -31,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(SettingsActivity.makeIntent(this));
             return true;
         }
 
