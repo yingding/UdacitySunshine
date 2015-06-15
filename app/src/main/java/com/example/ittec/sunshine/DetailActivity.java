@@ -6,16 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.support.v7.widget.ShareActionProvider;
 
 
 public class DetailActivity extends ActionBarActivity {
+    private final static String TAG = DetailActivity.class.getSimpleName();
     public final static String DETAIL_STR_NAME = "detailName";
     private static String shareStrSurfix;
     private ShareActionProvider mShareActionProvider;
@@ -36,7 +38,7 @@ public class DetailActivity extends ActionBarActivity {
         if (intent != null) {
             detailStr = intent.getStringExtra(DETAIL_STR_NAME);
         }
-        shareStrSurfix ="#" + getString(R.string.app_name);
+        shareStrSurfix =" #" + getString(R.string.app_name);
         //TextView tv = (TextView) findViewById(R.id.detail_string);
         //tv.setText(intent.getStringExtra(DETAIL_STR_NAME));
     }
@@ -53,6 +55,8 @@ public class DetailActivity extends ActionBarActivity {
         // use MenuItemCompat.getActionProvoder instead of item.getActionProvider()
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         Intent shareIntent = new Intent(Intent.ACTION_SEND)
+                // prevent the activity to be shared to from placed to activity stack.
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
                 .putExtra(Intent.EXTRA_TEXT, detailStr + shareStrSurfix)
                 .setType("text/plain");
         mShareActionProvider.setShareIntent(shareIntent);
@@ -62,6 +66,8 @@ public class DetailActivity extends ActionBarActivity {
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(shareIntent);
+        } else {
+            Log.d(TAG, "Share Action Provider is null?");
         }
     }
     @Override

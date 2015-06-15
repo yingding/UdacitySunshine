@@ -7,7 +7,7 @@
     <!-- use app:actionProviderClass to support the v7 widget-->
     <item
         android:id="@+id/detail_menu_item_share"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/detail_menu_item_share_label"
         app:actionProviderClass=
             "android.support.v7.widget.ShareActionProvider"
