@@ -28,7 +28,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**
@@ -154,23 +153,44 @@ public class ForecastFragment extends Fragment {
                 getString(R.string.pref_location_key),
                 getString(R.string.pref_location_default)
         );
-        weatherTask.execute(locationStr);
+        String unitType = prefs.getString(
+                getString(R.string.pref_units_key),
+                getString(R.string.pref_units_metric));
+        weatherTask.execute(locationStr, unitType);
     }
-
-    private String formatHighLows(double high, double low) {
+    /*
+    private String formatHighLows(double high, double low, String unitType) {
         // Data is fetched in Celsius by default.
         // If user prefers to see in Fahrenheit, convert the values here.
         // We do this rather than fetching in Fahrenheit so that the user can
         // change this option without us having to re-fetch the data once
         // we start storing the values in a database
+
+
         SharedPreferences sharedPrefs =
                 PreferenceManager.getDefaultSharedPreferences(appCtx);
         String unitType = sharedPrefs.getString(
                 getString(R.string.pref_units_key),
                 getString(R.string.pref_units_metric));
-        if (unitType.equals(getString(R.string.))
-        )
-    }
+
+        if ( unitType.equals(getString(R.string.pref_units_imperial))
+                ) {
+            // need to format the high and low of the temperature
+            high = Util.CelsiusToFahrenheit(high);
+            low = Util.CelsiusToFahrenheit(low);
+        } else if (!unitType.equals(getString(R.string.pref_units_metric))) {
+            Log.d(TAG, "Unit type not found: " +  unitType);
+        }
+
+        // For presentation, assume the user doesn't care about tenths of a degree.
+        long roundedHigh = Math.round(high);
+        long roundedLow = Math.round(low);
+
+        String highLowStr = roundedHigh + "/" + roundedLow;
+        return highLowStr;
+    }*/
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -187,11 +207,32 @@ public class ForecastFragment extends Fragment {
 
         private final String TAG = FetchWeatherTask.class.getSimpleName();
 
+        private FormatHighLowsInterface formatInterface = new FormatHighLowsInterface() {
+            @Override
+            public String formatHighLows(double high, double low, String unitType) {
+                if ( unitType.equals(getString(R.string.pref_units_imperial))
+                        ) {
+                    // need to format the high and low of the temperature
+                    high = Util.CelsiusToFahrenheit(high);
+                    low = Util.CelsiusToFahrenheit(low);
+                } else if (!unitType.equals(getString(R.string.pref_units_metric))) {
+                    Log.d(TAG, "Unit type not found: " +  unitType);
+                }
+
+                // For presentation, assume the user doesn't care about tenths of a degree.
+                long roundedHigh = Math.round(high);
+                long roundedLow = Math.round(low);
+
+                String highLowStr = roundedHigh + "/" + roundedLow;
+                return highLowStr;
+            }
+        };
+
         @Override
         protected String[] doInBackground(String... params) {
 
             // If there's no zip code, there's nothing to look up, Verify size of params.
-            if (params.length == 0) {
+            if (params.length < 2) {
                 return null;
             }
             // These two need to be declared outside the try/catch
@@ -206,6 +247,7 @@ public class ForecastFragment extends Fragment {
 
             // Query param values
             String postCodeStr = params[0];
+            String unitType = params[1];
             String format = "json";
             String units = "metric";
             int numDays = 7;
@@ -283,7 +325,8 @@ public class ForecastFragment extends Fragment {
                 WeatherDataParser dataParser = new WeatherDataParser();
                 try {
                     forecastDataArray =
-                            dataParser.getWeatherDataFromJson(forecastJsonStr, numDays);
+                            dataParser.getWeatherDataFromJson(forecastJsonStr, numDays,
+                                    formatInterface, unitType);
                 } catch (JSONException e) {
                     Log.e(TAG, "Error ", e);
                 }

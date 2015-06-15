@@ -50,13 +50,20 @@ public class WeatherDataParser {
     /**
      * Prepare the weather high/lows for presentation.
      */
-    private String formatHighLows(double high, double low) {
-        // For presentation, assume the user doesn't care about tenths of a degree.
-        long roundedHigh = Math.round(high);
-        long roundedLow = Math.round(low);
 
-        String highLowStr = roundedHigh + "/" + roundedLow;
-        return highLowStr;
+    private static FormatHighLowsInterface makeFormatInterface() {
+        return new FormatHighLowsInterface() {
+
+            @Override
+            public String formatHighLows(double high, double low, String unitType) {
+                // For presentation, assume the user doesn't care about tenths of a degree.
+                long roundedHigh = Math.round(high);
+                long roundedLow = Math.round(low);
+
+                String highLowStr = roundedHigh + "/" + roundedLow;
+                return highLowStr;
+            }
+        };
     }
 
     /**
@@ -66,7 +73,9 @@ public class WeatherDataParser {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    public String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)
+    public String[] getWeatherDataFromJson(String forecastJsonStr, int numDays,
+                                           FormatHighLowsInterface formatInterface,
+                                           String unitType)
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
@@ -125,7 +134,7 @@ public class WeatherDataParser {
             double high = temperatureObject.getDouble(OWM_MAX);
             double low = temperatureObject.getDouble(OWM_MIN);
 
-            highAndLow = formatHighLows(high, low);
+            highAndLow = formatInterface.formatHighLows(high, low, unitType);
             resultStrs[i] = day + " - " + description + " - " + highAndLow;
         }
         /*
