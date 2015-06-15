@@ -4,4 +4,13 @@
     tools:context="com.example.ittec.sunshine.DetailActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <!-- use app:actionProviderClass to support the v7 widget-->
+    <item
+        android:id="@+id/detail_menu_item_share"
+        app:showAsAction="ifRoom"
+        android:title="@string/detail_menu_item_share_label"
+        app:actionProviderClass=
+            "android.support.v7.widget.ShareActionProvider"
+        />
+
 </menu>

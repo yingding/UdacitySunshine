@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,10 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.support.v7.widget.ShareActionProvider;
 
 
 public class DetailActivity extends ActionBarActivity {
     public final static String DETAIL_STR_NAME = "detailName";
+    private static String shareStrSurfix;
+    private ShareActionProvider mShareActionProvider;
+    private String detailStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +32,11 @@ public class DetailActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-        //Intent intent = getIntent();
+        Intent intent = getIntent();
+        if (intent != null) {
+            detailStr = intent.getStringExtra(DETAIL_STR_NAME);
+        }
+        shareStrSurfix ="#" + getString(R.string.app_name);
         //TextView tv = (TextView) findViewById(R.id.detail_string);
         //tv.setText(intent.getStringExtra(DETAIL_STR_NAME));
     }
@@ -36,9 +45,25 @@ public class DetailActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.detail, menu);
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.detail_menu_item_share);
+
+        // Fetch and store ShareActionProvider
+        // use MenuItemCompat.getActionProvoder instead of item.getActionProvider()
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND)
+                .putExtra(Intent.EXTRA_TEXT, detailStr + shareStrSurfix)
+                .setType("text/plain");
+        mShareActionProvider.setShareIntent(shareIntent);
         return true;
     }
 
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
