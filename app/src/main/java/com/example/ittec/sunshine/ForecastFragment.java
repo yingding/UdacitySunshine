@@ -224,7 +224,8 @@ public class ForecastFragment extends Fragment {
 
     public static Intent makeMapIntent(String location) {
         Intent intent = new Intent().setAction(Intent.ACTION_VIEW);
-        Uri geoLocation = Uri.parse("geo:0,0?q="+location);
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                .appendQueryParameter("q",location).build();
         intent.setData(geoLocation);
         return intent;
     }
