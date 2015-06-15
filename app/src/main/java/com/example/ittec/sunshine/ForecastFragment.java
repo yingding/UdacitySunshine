@@ -202,14 +202,14 @@ public class ForecastFragment extends Fragment {
                 updateWeather();
                 return true;
             case R.id.action_show_location:
-                showLocationOnMap();
+                onPreferredLocationInMap();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void showLocationOnMap() {
+    private void onPreferredLocationInMap() {
         Intent intent = ForecastFragment.makeMapIntent(sharedPrefs.getString(
                 getString(R.string.pref_location_key),
                 getString(R.string.pref_location_default)
@@ -218,14 +218,14 @@ public class ForecastFragment extends Fragment {
         if (intent.resolveActivity(appCtx.getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            Log.d(TAG,"No Activity for Uri: " + intent.getData().toString());
+            Log.d(TAG, "No Activity for Uri: " + intent.getData().toString());
         }
     }
 
     public static Intent makeMapIntent(String location) {
         Intent intent = new Intent().setAction(Intent.ACTION_VIEW);
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-                .appendQueryParameter("q",location).build();
+                .appendQueryParameter("q", location).build();
         intent.setData(geoLocation);
         return intent;
     }
