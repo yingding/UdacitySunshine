@@ -141,7 +141,7 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.forecastfragment,menu);
+        inflater.inflate(R.menu.forecastfragment, menu);
     }
 
     private void updateWeather() {
@@ -155,6 +155,21 @@ public class ForecastFragment extends Fragment {
                 getString(R.string.pref_location_default)
         );
         weatherTask.execute(locationStr);
+    }
+
+    private String formatHighLows(double high, double low) {
+        // Data is fetched in Celsius by default.
+        // If user prefers to see in Fahrenheit, convert the values here.
+        // We do this rather than fetching in Fahrenheit so that the user can
+        // change this option without us having to re-fetch the data once
+        // we start storing the values in a database
+        SharedPreferences sharedPrefs =
+                PreferenceManager.getDefaultSharedPreferences(appCtx);
+        String unitType = sharedPrefs.getString(
+                getString(R.string.pref_units_key),
+                getString(R.string.pref_units_metric));
+        if (unitType.equals(getString(R.string.))
+        )
     }
 
     @Override
