@@ -38,6 +38,7 @@ public class ForecastFragment extends Fragment {
     private ArrayList<String> weekForecast;
     private ArrayAdapter<String> forecastAdapter;
     private Context appCtx; // applicationContext lives longer as Activity Context
+    private SharedPreferences sharedPrefs;
     public ForecastFragment() {
     }
 
@@ -48,6 +49,7 @@ public class ForecastFragment extends Fragment {
         setHasOptionsMenu(true);
         // Set ApplicationContext to member variable
         appCtx = getActivity().getApplication();
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(appCtx);
     }
 
     @Override
@@ -146,14 +148,14 @@ public class ForecastFragment extends Fragment {
     private void updateWeather() {
         FetchWeatherTask weatherTask = new FetchWeatherTask();
         // use activity context which is in the same package
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(getActivity());//or with appCtx
-        String locationStr = prefs.getString(
+        //SharedPreferences prefs = PreferenceManager
+        //        .getDefaultSharedPreferences(getActivity());//or with appCtx
+        String locationStr = sharedPrefs.getString(
                 // get the key from string resource
                 getString(R.string.pref_location_key),
                 getString(R.string.pref_location_default)
         );
-        String unitType = prefs.getString(
+        String unitType = sharedPrefs.getString(
                 getString(R.string.pref_units_key),
                 getString(R.string.pref_units_metric));
         weatherTask.execute(locationStr, unitType);
@@ -195,11 +197,36 @@ public class ForecastFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            updateWeather();
-            return true;
+        switch (id) {
+            case R.id.action_refresh:
+                updateWeather();
+                return true;
+            case R.id.action_show_location:
+                showLocationOnMap();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private void showLocationOnMap() {
+        Intent intent = ForecastFragment.makeMapIntent(sharedPrefs.getString(
+                getString(R.string.pref_location_key),
+                getString(R.string.pref_location_default)
+        ));
+        // if there is a activity can launch this intent
+        if (intent.resolveActivity(appCtx.getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d(TAG,"No Activity for Uri: " + intent.getData().toString());
+        }
+    }
+
+    public static Intent makeMapIntent(String location) {
+        Intent intent = new Intent().setAction(Intent.ACTION_VIEW);
+        Uri geoLocation = Uri.parse("geo:0,0?q="+location);
+        intent.setData(geoLocation);
+        return intent;
     }
 
     private class FetchWeatherTask

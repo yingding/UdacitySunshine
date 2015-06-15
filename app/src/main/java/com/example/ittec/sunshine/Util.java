@@ -12,4 +12,5 @@ public class Util {
     public static double CelsiusToFahrenheit(double celsius) {
         return celsius * (9.0 / 5) + 32.0;
     }
+
 }
